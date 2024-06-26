@@ -30,6 +30,7 @@ import Default4_3 from '../../modals/Default4_3';
 import SpeedSlider from '../../modals/SpeedSlider';
 import {RootStackPramList} from '../../../App';
 import NoConnecting from '../../modals/NoConnecting';
+import Default16_9 from '../../modals/Default16_9';
 // Reanimated.addWhitelistedNativeProps({
 //   zoom: true,
 // });
@@ -43,6 +44,7 @@ const DefaultView = ({navigation}: DefaultViewProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [speedSliderVisible, setSpeedSliderVisible] = useState(false);
   const [noCnnectingVisible, setNoConnectingVisible] = useState(false);
+  const [default16_9Visible, setDefault16_9Visible] = useState(false);
   const [picture, setPicture] = useState<PhotoFile>();
   const [isActive, setIsActive] = useState(AppState.currentState === 'active');
   const [angle, setAngle] = useState(0);
@@ -110,7 +112,9 @@ const DefaultView = ({navigation}: DefaultViewProps) => {
   const toggleNoConnectingVisibility = () => {
     setNoConnectingVisible(!noCnnectingVisible);
   };
-
+  const toggleDefault16_9Visibility = () => {
+    setDefault16_9Visible(!default16_9Visible);
+  };
   useEffect(() => {
     const requestCameraPermission = async () => {
       await requestPermission();
@@ -174,6 +178,10 @@ const DefaultView = ({navigation}: DefaultViewProps) => {
             modalVisible={noCnnectingVisible}
             setModalVisible={setNoConnectingVisible}
           />
+          <Default16_9
+            modalVisible={default16_9Visible}
+            setModalVisible={setDefault16_9Visible}
+          />
           <View style={styles.toolsContainer}>
             <Text style={{color: '#ffffff', textAlign: 'center'}}>
               Current position 0.00
@@ -226,7 +234,9 @@ const DefaultView = ({navigation}: DefaultViewProps) => {
                 ]}>
                 <Text style={styles.btnText}>{angle}°</Text>
               </Pressable>
-              <Pressable onPress={null} style={[styles.twistBtn, {width: 75}]}>
+              <Pressable
+                onPress={toggleDefault16_9Visibility}
+                style={[styles.twistBtn, {width: 75}]}>
                 <Image source={require('../../assets/right.png')} />
                 <Text style={[styles.btnText, {marginLeft: 5}]}>right</Text>
               </Pressable>

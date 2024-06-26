@@ -14,9 +14,7 @@ import {RootStackPramList} from '../../../App';
 
 type AllPhotosProps = NativeStackScreenProps<RootStackPramList, 'AllPhotos'>;
 const AllPhotos = ({navigation}: AllPhotosProps) => {
-  const [images, setImages] = useState<string[]>([
-    '../../assets/check_circle_outline.png',
-  ]);
+  const [images, setImages] = useState<string[]>([]);
   const [activeSelection, setActiveSelection] = useState(false);
   const [selectCount, setSelectCount] = useState(0);
 
@@ -35,7 +33,9 @@ const AllPhotos = ({navigation}: AllPhotosProps) => {
   const toggleSelection = () => {
     setActiveSelection(!activeSelection);
   };
-
+  const updateSelectCount = () => {
+    setSelectCount(selectCount + 1);
+  };
   useEffect(() => {
     pickImages();
   }, []);
@@ -55,22 +55,31 @@ const AllPhotos = ({navigation}: AllPhotosProps) => {
         </Pressable>
       </View>
       <View style={styles.gallery}>
-        <ScrollView contentContainerStyle={styles.scrollView}>
+        {/* <ScrollView contentContainerStyle={styles.scrollView}>
           {images.map((imageUri, index) => (
-            <Image style={styles.image} key={index} source={{uri: imageUri}} />
+            <Pressable style={styles.imageBtn} key={index}>
+              <Image
+                style={styles.image}
+                key={index}
+                source={{uri: imageUri}}
+              />
+            </Pressable>
           ))}
-        </ScrollView>
+        </ScrollView> */}
 
-        {/* <FlatList
+        <FlatList
           data={images}
           numColumns={3}
           keyExtractor={item => item}
           renderItem={({item, index}) => (
-            <Pressable onPress={null}>
+            <Pressable
+              style={[item ? styles.imageBtn : {}]}
+              key={index}
+              onPress={updateSelectCount}>
               <Image style={styles.image} key={index} source={{uri: item}} />
             </Pressable>
           )}
-        /> */}
+        />
       </View>
       <View style={styles.cameraBtn}>
         <Pressable onPress={() => navigation.navigate('DefaultView')}>
@@ -133,6 +142,7 @@ const styles = StyleSheet.create({
   },
   gallery: {
     flex: 1,
+    // padding: 2,
   },
   headerTxt: {
     fontWeight: '500',
@@ -144,19 +154,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     // flexWrap: 'wrap',
   },
-  image: {
-    width: '33.3%',
-    height: 130,
-    borderLeftWidth: 1,
-    borderBottomWidth: 1,
 
-    // margin: 5,
+  image: {
+    width: 129,
+    height: 129,
   },
   imageBtn: {
-    // borderColor: '#000000',
-    // borderWidth: 2,
-    width: 300,
-    height: 130,
+    borderLeftWidth: 2,
+    borderBottomWidth: 2,
+    borderColor: 'rgba(0,0,0,.8)',
   },
   cameraBtn: {
     width: 64,
