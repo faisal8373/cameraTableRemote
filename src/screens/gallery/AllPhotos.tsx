@@ -15,6 +15,9 @@ import {RootStackPramList} from '../../../App';
 type AllPhotosProps = NativeStackScreenProps<RootStackPramList, 'AllPhotos'>;
 const AllPhotos = ({navigation}: AllPhotosProps) => {
   const [images, setImages] = useState<string[]>([]);
+  const [selectedImages, setSelectedImages] = useState<{
+    [key: string]: boolean;
+  }>({});
   const [activeSelection, setActiveSelection] = useState(false);
   const [selectCount, setSelectCount] = useState(0);
 
@@ -30,11 +33,24 @@ const AllPhotos = ({navigation}: AllPhotosProps) => {
       },
     );
   };
+
   const toggleSelection = () => {
+    setSelectCount(0);
+    setSelectedImages({});
     setActiveSelection(!activeSelection);
   };
   const updateSelectCount = () => {
     setSelectCount(selectCount + 1);
+  };
+  const updateSelected = (item: string) => {
+    setSelectedImages(prevState => ({
+      ...prevState,
+      [item]: !prevState[item],
+    }));
+    const selected = Object.values(selectedImages).filter(
+      value => value,
+    ).length;
+    setSelectCount(selected);
   };
   useEffect(() => {
     pickImages();
@@ -73,10 +89,24 @@ const AllPhotos = ({navigation}: AllPhotosProps) => {
           keyExtractor={item => item}
           renderItem={({item, index}) => (
             <Pressable
+              disabled={!activeSelection}
               style={[item ? styles.imageBtn : {}]}
               key={index}
-              onPress={updateSelectCount}>
-              <Image style={styles.image} key={index} source={{uri: item}} />
+              onPress={() => {
+                updateSelectCount();
+                updateSelected(item);
+                console.log('selected', selectedImages[item]);
+              }}>
+              <View style={{}}>
+                <Image
+                  style={[
+                    styles.image,
+                    selectedImages[item] === true ? {opacity: 0.5} : {},
+                  ]}
+                  key={index}
+                  source={{uri: item}}
+                />
+              </View>
             </Pressable>
           )}
         />
@@ -98,7 +128,7 @@ const AllPhotos = ({navigation}: AllPhotosProps) => {
             />
           </Pressable>
 
-          <Pressable>
+          <Pressable onPress={() => setSelectCount(0)}>
             <Image
               style={[styles.footerImage, selectCount ? {opacity: 1} : {}]}
               source={require('../../assets/delete.png')}

@@ -182,9 +182,10 @@ const DefaultView = ({navigation}: DefaultViewProps) => {
             modalVisible={default16_9Visible}
             setModalVisible={setDefault16_9Visible}
           />
+
           <View style={styles.toolsContainer}>
             <Text style={{color: '#ffffff', textAlign: 'center'}}>
-              Current position 0.00
+              Current position {angle}
             </Text>
 
             {speedSliderVisible ? (
